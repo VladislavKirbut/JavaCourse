@@ -9,22 +9,22 @@ public class Example3 {
         ex.doWork1();
     }
 
+    public synchronized void iteration() {
+        counter++;
+    }
+
     public void doWork1() throws InterruptedException {
-        Thread thread3 = new Thread(new Runnable(){
-            public void run() {
+
+        Thread thread3 = new Thread(() -> {
                 for(int i = 0; i < 10000; i++) {
-                    counter++;
+                    iteration();
                 }
-            }
         });
 
-        Thread thread4 = new Thread(new Runnable() {
-            @Override
-           public void run() {
+        Thread thread4 = new Thread(() -> {
                for(int i = 0; i < 10000; i++) {
-                   counter++;
+                   iteration();
                }
-           }
         });
 
         thread3.start();
@@ -32,6 +32,8 @@ public class Example3 {
 
         thread3.join();
         thread4.join();
+
+        System.out.println(counter);
     }
 }
 
